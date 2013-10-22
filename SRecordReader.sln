@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRecordReader", "SRecordReader\SRecordReader.csproj", "{6D3C62E6-9BD7-414A-A0A7-88E8C6F73BBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRecord", "..\SRecord\SRecord\CSRecord.csproj", "{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nand512Library", "..\Nand512Library\Nand512Library\Nand512Library.csproj", "{B59712DB-0B00-4975-8F4B-10B3F085C172}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D3C62E6-9BD7-414A-A0A7-88E8C6F73BBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D3C62E6-9BD7-414A-A0A7-88E8C6F73BBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D3C62E6-9BD7-414A-A0A7-88E8C6F73BBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D3C62E6-9BD7-414A-A0A7-88E8C6F73BBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B59712DB-0B00-4975-8F4B-10B3F085C172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B59712DB-0B00-4975-8F4B-10B3F085C172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B59712DB-0B00-4975-8F4B-10B3F085C172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B59712DB-0B00-4975-8F4B-10B3F085C172}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
