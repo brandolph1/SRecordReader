@@ -6,11 +6,18 @@ using WelchAllyn.SRecord;
 
 namespace WelchAllyn.SRecordReader
 {
+    enum Endian
+    {
+        Little,
+        Big
+    };
+
     class Program
     {
         [STAThreadAttribute]
         static void Main(string[] args)
         {
+            Endian endian = Endian.Big;
             CSRecord srec;
             string strInFile = null;
             FileStream fs_in = null;
@@ -59,27 +66,51 @@ namespace WelchAllyn.SRecordReader
                     StreamReader str_in = new StreamReader(fs_in.Name);
                     String strInLine;
                     Byte[] data;
-                    ulong chksum = 0UL;
+                    uint chksum = 0;
                     int state;
+                    int line;
+                    uint last_start_addr, next_expected_start_addr;
 
                     Console.WriteLine("Scanning...");
                     state = 0;
+                    line = 1;
+                    last_start_addr = 0U;
+                    next_expected_start_addr = 0xFFFFFFF0U;
 
                     while ((strInLine = str_in.ReadLine()) != null)
                     {
                         srec = new CSRecord(strInLine);
                         data = srec.DataBytes;
 
+                        if (state != 0)
+                        {
+                            Console.WriteLine("Unexpected--starting new hex-line at state 1");
+                        }
+
                         for (int ii = 0; ii < data.Length; ++ii)
                         {
                             switch (state)
                             {
                                 case 0:
-                                    chksum += (ulong) data[ii];
+                                    if (endian == Endian.Little)
+                                    {
+                                        chksum += (uint)data[ii];
+                                    }
+                                    else
+                                    {
+                                        chksum += ((uint)data[ii] * 0x100);
+                                    }
                                     state = 1;
                                     break;
                                 case 1:
-                                    chksum += ((ulong)data[ii] * 0x100UL);
+                                    if (endian == Endian.Little)
+                                    {
+                                        chksum += ((uint)data[ii] * 0x100);
+                                    }
+                                    else
+                                    {
+                                        chksum += (uint)data[ii];
+                                    }
                                     state = 0;
                                     break;
                                 default:
@@ -89,8 +120,7 @@ namespace WelchAllyn.SRecordReader
                     }
 
                     str_in.Close();
-                    //fs_in.Close();
-                    Console.WriteLine("16 bit Checksum={0:X}", chksum);
+                    Console.WriteLine("16 bit Checksum={0:X8}", chksum);
                 }
 #if DEBUG
                 //MessageBox.Show("Done","SRecord Reader...");
