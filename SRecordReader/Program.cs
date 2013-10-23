@@ -17,7 +17,7 @@ namespace WelchAllyn.SRecordReader
         [STAThreadAttribute]
         static void Main(string[] args)
         {
-            Endian endian = Endian.Big;
+            Endian endian = Endian.Little;
             CSRecord srec;
             string strInFile = null;
             FileStream fs_in = null;
@@ -66,61 +66,96 @@ namespace WelchAllyn.SRecordReader
                     StreamReader str_in = new StreamReader(fs_in.Name);
                     String strInLine;
                     Byte[] data;
+                    Byte[] memory;
                     uint chksum = 0;
                     int state;
                     int line;
-                    uint last_start_addr, next_expected_start_addr;
+                    uint start_addr, next_expected_start_addr;
+                    const int sizeof_NAND512 = 0x4000000;   // NAND512 holds 64MB of data
 
-                    Console.WriteLine("Scanning...");
-                    state = 0;
-                    line = 1;
-                    last_start_addr = 0U;
+                    try
+                    {
+                        memory = new Byte[sizeof_NAND512];
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Failed to allocated memory array, {0}", ex.ToString());
+                        return;
+                    }
+
+                    for (int ii = 0; ii < sizeof_NAND512; ++ii)
+                    {
+                        memory[ii] = 0xFF;
+                    }
+
+                    Console.WriteLine("Filling memory...");
+                    line = 0;
+                    start_addr = 0U;
                     next_expected_start_addr = 0xFFFFFFF0U;
 
                     while ((strInLine = str_in.ReadLine()) != null)
                     {
+                        ++line;
                         srec = new CSRecord(strInLine);
                         data = srec.DataBytes;
 
-                        if (state != 0)
+                        start_addr = srec.MemoryAddress;
+
+                        if (start_addr != next_expected_start_addr)
                         {
-                            Console.WriteLine("Unexpected--starting new hex-line at state 1");
+                            if (srec.RecordType != (int)CSRecord.SRecordType.S7)
+                            {
+                                Console.WriteLine("Gap in image found at line {0}, start={1:X8}, expected={2:X8}", line, start_addr, next_expected_start_addr);
+                            }
                         }
 
                         for (int ii = 0; ii < data.Length; ++ii)
                         {
-                            switch (state)
-                            {
-                                case 0:
-                                    if (endian == Endian.Little)
-                                    {
-                                        chksum += (uint)data[ii];
-                                    }
-                                    else
-                                    {
-                                        chksum += ((uint)data[ii] * 0x100);
-                                    }
-                                    state = 1;
-                                    break;
-                                case 1:
-                                    if (endian == Endian.Little)
-                                    {
-                                        chksum += ((uint)data[ii] * 0x100);
-                                    }
-                                    else
-                                    {
-                                        chksum += (uint)data[ii];
-                                    }
-                                    state = 0;
-                                    break;
-                                default:
-                                    throw new ApplicationException("Unexpected state value");
-                            }
+                            memory[start_addr + ii] = data[ii];
+                        }
+
+                        next_expected_start_addr = start_addr + (uint)data.Length;
+                    }
+#if True==True
+                    uint other = 0;
+
+                    state = 0;
+
+                    for (int ii = 0; ii < memory.Length; ++ii)
+                    {
+                        other += (uint)memory[ii];
+
+                        switch (state)
+                        {
+                            case 0:
+                                if (endian == Endian.Little)
+                                {
+                                    chksum += (uint)memory[ii];
+                                }
+                                else
+                                {
+                                    chksum += ((uint)memory[ii] * 0x100U);
+                                }
+                                state = 1;
+                                break;
+                            case 1:
+                                if (endian == Endian.Little)
+                                {
+                                    chksum += ((uint)memory[ii] * 0x100U);
+                                }
+                                else
+                                {
+                                    chksum += (uint)memory[ii];
+                                }
+                                state = 0;
+                                break;
+                            default:
+                                throw new ApplicationException("Unexpected state value");
                         }
                     }
-
+#endif
                     str_in.Close();
-                    Console.WriteLine("16 bit Checksum={0:X8}", chksum);
+                    Console.WriteLine("16 bit Checksum={0:X8}, other={1:X8}", chksum, other);
                 }
 #if DEBUG
                 //MessageBox.Show("Done","SRecord Reader...");
