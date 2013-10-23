@@ -35,16 +35,13 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Nand512Library\Nand512Library\Nand512Library.csproj">
-      <Project>{B59712DB-0B00-4975-8F4B-10B3F085C172}</Project>
-      <Name>Nand512Library</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SRecord\SRecord\CSRecord.csproj">
       <Project>{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}</Project>
       <Name>CSRecord</Name>
