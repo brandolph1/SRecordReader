@@ -42,6 +42,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Nand512Library\CNandProperties_cppcli\CNandProperties_cppcli.vcproj">
+      <Project>{5AACAECC-D676-432D-B37E-5E48C2B7F751}</Project>
+      <Name>CNandProperties_cppcli</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Nand512Library\Nand512Library_cppcli\Nand512Library_cppcli.vcproj">
+      <Project>{C3E37714-F91D-4DCB-9A9D-0F288D222129}</Project>
+      <Name>Nand512Library_cppcli</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SRecord\SRecord\CSRecord.csproj">
       <Project>{7AC6E887-69A6-44D5-8F3A-0E4DB0D0400A}</Project>
       <Name>CSRecord</Name>

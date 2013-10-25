@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using WelchAllyn.SRecord;
+using WelchAllyn.Nand512Library;
 
 namespace WelchAllyn.SRecordReader
 {
@@ -117,6 +118,8 @@ namespace WelchAllyn.SRecordReader
                         next_expected_start_addr = start_addr + (uint)data.Length;
                     }
 #if True==True
+                    CDevice device = new CDevice();
+                    byte[] block = new byte[device.BlockLength];
                     uint other = 0;
 
                     state = 0;
